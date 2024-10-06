@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('page_title')
-    اضاغة دفعات
+    اضافة دفعات
 @endsection
 
 
