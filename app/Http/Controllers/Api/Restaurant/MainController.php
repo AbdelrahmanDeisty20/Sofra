@@ -224,21 +224,6 @@ class MainController extends Controller
             'count' => $totalCount,
             ]);
     }
-    public function paid(Request $request)
-    {
-        $validator = validator()->make($request->all(), [
-            'pay' => 'required',
-            'details' => 'required',
-            'date' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return resposeJison(0, $validator->errors()->first(), $validator->errors());
-        }
-        // $resstaurants= Restaurant::find($request->restaurant_id);
-        // $resstaurants->payments()->create($request->all());
-        $payments = Payment::create($request->all());
-        return resposeJison(1, 'تم إضافة الدفع بنجاح', $payments);
-    }
     public function myProducts(Request $request)
     {
         $products= Product::where('restaurant_id',$request->restaurant_id)->paginate(20);
