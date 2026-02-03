@@ -49,7 +49,7 @@
                                         <td class="text-center">{{ $record->name }}</td>
                                         <td class="text-center">{{ $record->email }}</td>
                                         <td class="text-center">{{ $record->phone }}</td>
-                                        <td class="text-center">{{ $record->regions->name }}</td>
+                                        <td class="text-center">{{ $record->region->name ?? 'غير محدد' }}</td>
                                         <td class="text-center">{{ $record->image }}</td>
                                         <td class="text-center">
                                             @if ($record->status == 1)

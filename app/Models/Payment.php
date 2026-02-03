@@ -6,14 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-
     protected $table = 'payments';
     public $timestamps = true;
-    protected $fillable = array('pay', 'date', 'details','restaurant_id');
+    protected $fillable = array('pay', 'date', 'details', 'restaurant_id');
 
     public function restaurant()
     {
-        return $this->belongsTo('App\Models\Restaurant');
+        return $this->belongsTo(User::class, 'restaurant_id');
     }
-
 }

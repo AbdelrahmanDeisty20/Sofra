@@ -23,32 +23,34 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mobile.landing');
+})->name('landing');
+
+Route::get('/admin-dashboard', function () {
+    return redirect()->route('home');
 });
-
-Auth::routes();
-
 
 Auth::routes();
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware'=>['auth',AutoCheckPermission::class],'prefix'=>'admin'],function(){
+Route::group(['middleware' => ['auth', AutoCheckPermission::class], 'prefix' => 'admin'], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
-    Route::resource('categories',categoriesController::class);
-    Route::resource('regions',regionsController::class);
-    Route::resource('cities',citiesController::class);
-    Route::resource('contacts',contactsController::class);
-    Route::resource('settings',settingsController::class);
-    Route::resource('clients',clientsController::class);
-    Route::resource('comments',commentsController::class);
-    Route::resource('restaurants',restaurantsController::class);
-    Route::get('change-password', [changePasswordController::class,'index'])->name('change-password');
-    Route::post('change-password',[changePasswordController::class,'update'])->name('change-password.update');
-    Route::resource('products',productsController::class);
+    Route::resource('categories', categoriesController::class);
+    Route::resource('regions', regionsController::class);
+    Route::resource('cities', citiesController::class);
+    Route::resource('contacts', contactsController::class);
+    Route::resource('settings', settingsController::class);
+    Route::resource('clients', clientsController::class);
+    Route::resource('comments', commentsController::class);
+    Route::resource('restaurants', restaurantsController::class);
+    Route::get('change-password', [changePasswordController::class, 'index'])->name('change-password');
+    Route::post('change-password', [changePasswordController::class, 'update'])->name('change-password.update');
+    Route::resource('products', productsController::class);
     Route::resource('orders', controller: ordersController::class);
     Route::resource('offers', controller: offersController::class);
     Route::resource('payments', controller: paymentsController::class);
     Route::resource('users', controller: usersController::class);
-    Route::resource('roles',rolesController::class);
+    Route::resource('roles', rolesController::class);
+    Route::resource('permissions', \App\Http\Controllers\PermissionController::class);
 });

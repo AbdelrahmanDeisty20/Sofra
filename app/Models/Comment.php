@@ -6,19 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-
     protected $table = 'comments';
     public $timestamps = true;
-    protected $fillable = array('comment', 'rate','client_id','restaurant_id');
+    protected $fillable = array('comment', 'rate', 'client_id', 'restaurant_id');
 
     public function client()
     {
-        return $this->belongsTo('App\Models\Client');
+        return $this->belongsTo(User::class, 'client_id');
     }
 
     public function restaurant()
     {
-        return $this->belongsTo('App\Models\Restaurant');
+        return $this->belongsTo(User::class, 'restaurant_id');
     }
-
 }

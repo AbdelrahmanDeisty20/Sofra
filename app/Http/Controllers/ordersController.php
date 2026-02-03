@@ -12,7 +12,7 @@ class ordersController extends Controller
      */
     public function index()
     {
-        $records = Order::with('products','client','restaurant')->paginate(20);
+        $records = Order::with('products', 'client', 'restaurant')->paginate(20);
         return view('orders.index', compact('records'));
     }
 
@@ -62,6 +62,6 @@ class ordersController extends Controller
     public function destroy(string $id)
     {
         $records = Order::findOrFail($id)->delete();
-        return redirect()->back()->with('success','تم الحذف بجاح');
+        return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }

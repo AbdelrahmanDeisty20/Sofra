@@ -12,7 +12,7 @@ class commentsController extends Controller
      */
     public function index()
     {
-        $records = Comment::with('client','restaurant')->paginate(20);
+        $records = Comment::with('client', 'restaurant')->paginate(20);
         return view('comments.index', compact('records'));
     }
 
@@ -62,6 +62,6 @@ class commentsController extends Controller
     public function destroy(string $id)
     {
         $records = Comment::findOrFail($id)->delete();
-        return redirect()->back()->with('success','تم الحذف بجاح');
+        return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }

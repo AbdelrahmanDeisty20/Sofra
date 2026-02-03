@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Restaurant;
+use App\Enums\UserType;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class restaurantsController extends Controller
@@ -12,7 +13,7 @@ class restaurantsController extends Controller
      */
     public function index()
     {
-        $records = Restaurant::with('region')->paginate(20);
+        $records = User::where('type', UserType::RESTAURANT)->with('region')->paginate(20);
         return view('restaurants.index', compact('records'));
     }
 
@@ -61,7 +62,7 @@ class restaurantsController extends Controller
      */
     public function destroy(string $id)
     {
-        $records = Restaurant::findOrFail($id)->delete();
-        return redirect()->back()->with('succecc','تم الحذف بنجاح');
+        User::where('type', UserType::RESTAURANT)->findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }

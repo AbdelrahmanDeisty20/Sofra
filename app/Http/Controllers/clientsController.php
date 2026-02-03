@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
+use App\Enums\UserType;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class clientsController extends Controller
@@ -12,7 +13,7 @@ class clientsController extends Controller
      */
     public function index()
     {
-        $records = Client::with('regions')->paginate(20);
+        $records = User::where('type', UserType::CLIENT)->with('region')->paginate(20);
         return view('clients.index', compact('records'));
     }
 
@@ -61,7 +62,7 @@ class clientsController extends Controller
      */
     public function destroy(string $id)
     {
-        $records = Client::findOrFail($id)->delete();
+        User::where('type', UserType::CLIENT)->findOrFail($id)->delete();
         return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }

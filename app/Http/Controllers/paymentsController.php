@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserType;
 use App\Models\Payment;
-use App\Models\Restaurant;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class paymentsController extends Controller
@@ -22,7 +23,7 @@ class paymentsController extends Controller
      */
     public function create()
     {
-        $restaurants = Restaurant::all();
+        $restaurants = User::where('type', UserType::RESTAURANT)->get();
         return view('payments.create', compact('restaurants'));
     }
 
@@ -31,17 +32,17 @@ class paymentsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = validator()->make($request->all(),[
-            'date'=>'required',
-            'details'=> 'required',
-            'pay'=> 'required',
-        ],[
-            'date.required'=> 'التاريخ مطلوب',
-            'details.required'=> 'الرجاء ادخال التفاصيل',
-            'pay.required'=> 'الرجاء ادخال عدد الدفعات',
+        $validator = validator()->make($request->all(), [
+            'date' => 'required',
+            'details' => 'required',
+            'pay' => 'required',
+        ], [
+            'date.required' => 'التاريخ مطلوب',
+            'details.required' => 'الرجاء ادخال التفاصيل',
+            'pay.required' => 'الرجاء ادخال عدد الدفعات',
         ]);
         $records = Payment::create($request->all());
-        return redirect()->route('payments.index')->with('success','تمت الاضافة بنجاح');
+        return redirect()->route('payments.index')->with('success', 'تمت الاضافة بنجاح');
     }
 
     /**
@@ -66,13 +67,13 @@ class paymentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validator = validator()->make($request->all(),[
-            'date'=> 'required',
-            'pay'=> 'required',
-            'details'=> 'required',
+        $validator = validator()->make($request->all(), [
+            'date' => 'required',
+            'pay' => 'required',
+            'details' => 'required',
         ]);
         $records = Payment::findOrFail($id)->update($request->all());
-        return redirect()->route('payments.index')->with('success','تم التعديل بنجاح');
+        return redirect()->route('payments.index')->with('success', 'تم التعديل بنجاح');
     }
 
     /**
@@ -82,6 +83,6 @@ class paymentsController extends Controller
     {
         $records = Payment::findOrFail($id);
         $records->delete();
-        return redirect()->back()->with('success','تم الحذف بنجاح');
+        return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }

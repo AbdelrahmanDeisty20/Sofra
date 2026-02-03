@@ -47,7 +47,7 @@
                                     <tr>
                                         <td class="text-center">{{ $loop->iteration }}</td>
                                         <td class="text-center">{{ $record->name }}</td>
-                                        <td class="text-center">{{ $record->city->name }}</td>
+                                        <td class="text-center">{{ $record->city->name ?? 'غير محدد' }}</td>
                                         <td class="text-center">
                                             <a href="{{route('regions.edit',$record->id)}}"
                                                 class="btn btn-sm btn-primary"><i class="fa fa-edit"></i></a>

@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-
     protected $table = 'products';
     public $timestamps = true;
+
     protected $fillable = array(
         'name',
         'details',
@@ -17,7 +17,7 @@ class Product extends Model
         'ready',
         'restaurant_id',
         'image'
-);
+    );
 
     public function order()
     {
@@ -26,7 +26,6 @@ class Product extends Model
 
     public function restaurant()
     {
-        return $this->belongsTo('App\Models\Restaurant');
+        return $this->belongsTo(User::class, 'restaurant_id');
     }
-
 }

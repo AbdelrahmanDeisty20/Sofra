@@ -62,6 +62,6 @@ class offersController extends Controller
     public function destroy(string $id)
     {
         $records = Offer::findOrFail($id)->delete();
-        return redirect()->back()->with('success','تم الحذف بجاح');
+        return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }

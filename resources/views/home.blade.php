@@ -1,12 +1,10 @@
 @extends('layouts.app')
-@inject('client', 'App\Models\Client')
 @inject('categories', 'App\Models\Category')
 @inject('user', 'App\Models\User')
 @inject('regions', 'App\Models\Street')
 @inject('contact', 'App\Models\Contact')
 @inject('comment', 'App\Models\Comment')
 @inject('cities', 'App\Models\City')
-@inject('restaurants', 'App\Models\Restaurant')
 @inject('products', 'App\Models\Product')
 @inject('orders', 'App\Models\Order')
 @inject('offers', 'App\Models\Offer')
@@ -31,7 +29,7 @@
                     <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">clients</span>
-                        <span class="info-box-number">{{ $client->count() }}</span>
+                        <span class="info-box-number">{{ $user->where('type', \App\Enums\UserType::CLIENT)->count() }}</span>
                     </div>
                 </div>
             </div>
@@ -41,7 +39,7 @@
                     <span class="info-box-icon bg-green"><i class="fa fa-cutlery" aria-hidden="true"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">restaurants</span>
-                        <span class="info-box-number">{{ $restaurants->count() }}</span>
+                        <span class="info-box-number">{{ $user->where('type', \App\Enums\UserType::RESTAURANT)->count() }}</span>
                     </div>
                 </div>
             </div>
@@ -87,7 +85,7 @@
                     <span class="info-box-icon bg-green"><i class="fa fa-users" aria-hidden="true"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">users</span>
-                        <span class="info-box-number">{{ $user->count() }}</span>
+                        <span class="info-box-number">{{ $user->where('type', \App\Enums\UserType::ADMIN)->count() }}</span>
                     </div>
                 </div>
             </div>

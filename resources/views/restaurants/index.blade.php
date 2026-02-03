@@ -53,7 +53,7 @@
                                         <td class="text-center">{{ $record->email }}</td>
                                         <td class="text-center">{{ $record->phone }}</td>
                                         <td class="text-center">{{ $record->whatsapp }}</td>
-                                        <td class="text-center">{{ $record->region->name }}</td>
+                                        <td class="text-center">{{ $record->region->name ?? 'غير محدد' }}</td>
                                         <td class="text-center">{{ $record->minimum_order }}</td>
                                         <td class="text-center">{{ $record->image }}</td>
                                         <td class="text-center">{{ $record->delivery_fees }}</td>

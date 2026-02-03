@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class usersController extends Controller
 {
@@ -12,8 +14,8 @@ class usersController extends Controller
      */
     public function index()
     {
-        $records = User::all();
-        return view("users.index", compact("records"));
+        $records = User::where('type', UserType::ADMIN)->get();
+        return view('users.index', compact('records'));
     }
 
     /**
@@ -21,7 +23,7 @@ class usersController extends Controller
      */
     public function create()
     {
-        return view("users.create");
+        return view('users.create');
     }
 
     /**
@@ -30,18 +32,23 @@ class usersController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "name" => "required",
-            "email" => "required|unique:users",
-            "password" => "required|confirmed",
+            'name' => 'required',
+            'email' => 'required|unique:users',
+            'password' => 'required|confirmed',
             'roles_list' => 'required'
-        ],[
-            'name.required'=> 'الاسم مطلوب',
-            'email.required'=> 'الايميل مطلوب',
-            'password.required'=> 'كلمة المرور مطلوبة',
-            'password.confirmed'=> 'كلمة المرور لاتطابق',
-            'roles_list.required'=> 'الصلاحية مطلوبة'
+        ], [
+            'name.required' => 'الاسم مطلوب',
+            'email.required' => 'الايميل مطلوب',
+            'password.required' => 'كلمة المرور مطلوبة',
+            'password.confirmed' => 'كلمة المرور لاتطابق',
+            'roles_list.required' => 'الصلاحية مطلوبة'
         ]);
-        $user = User::create($request->except('roles_list', 'permission_list'));
+
+        $data = $request->except('roles_list', 'permission_list');
+        $data['password'] = Hash::make($request->password);
+        $data['type'] = UserType::ADMIN->value;
+
+        $user = User::create($data);
         $user->roles()->attach($request->input('roles_list'));
         session()->flash('success', 'تم اضافة مستخدم بنجاح');
         return redirect()->route('user.index');
@@ -70,19 +77,21 @@ class usersController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            "name" => "required|unique:users,name,$id",
-            "email" => "required",
-            "password" => "confirmed",
+            'name' => "required|unique:users,name,$id",
+            'email' => 'required',
+            'password' => 'confirmed',
             'roles_list' => 'required'
         ]);
         $user = User::findOrFail($id);
         $user->roles()->sync((array) $request->input('roles_list'));
-        if ($request->has('password')) {
-            $user->password = bcrypt($request->input('password'));
+
+        $data = $request->except('password', 'roles_list', 'permission_list');
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
         }
-        $update = $user->update($request->except('password'));
+        $user->update($data);
         session()->flash('success', 'تم تعديل المستخدم بنجاح');
-        return redirect()->route('users.edit',$id);
+        return redirect()->route('users.edit', $id);
     }
 
     /**
@@ -92,6 +101,6 @@ class usersController extends Controller
     {
         $model = User::findOrFail($id);
         $model->delete();
-        return redirect()->back()->with('success','تم الحذف بنجاح');
+        return redirect()->back()->with('success', 'تم الحذف بنجاح');
     }
 }
