@@ -6,7 +6,11 @@ use App\Enums\UserType;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Notifications\LowStockNotification;
+use App\Notifications\NewOrderAdminNotification;
+use App\Notifications\NewOrderRestaurantNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class OrderService
 {
@@ -52,13 +56,23 @@ class OrderService
                     'price' => $product->price,
                     'note' => $p['note'] ?? ''
                 ]);
+
+                // Deduct stock and check low stock
+                $product->decrement('stock', $p['quantity']);
+                if ($product->stock < 5) {
+                    $adminUsers = User::where('type', UserType::ADMIN)->get();
+                    $restaurantUser = $product->restaurant;
+
+                    Notification::send($adminUsers, new LowStockNotification($product));
+                    $restaurantUser->notify(new LowStockNotification($product));
+                }
             }
 
-            $restaurant->notifications()->create([
-                'title' => 'لديك طلب جديد',
-                'content' => 'لديك طلب جديد من ' . $user->name,
-                'order_id' => $order->id,
-            ]);
+            // Send notifications for new order
+            $restaurant->notify(new NewOrderRestaurantNotification($order));
+
+            $admins = User::where('type', UserType::ADMIN)->get();
+            Notification::send($admins, new NewOrderAdminNotification($order));
 
             return ['status' => 1, 'msg' => 'تم تنفيذ الطلب بنجاح', 'order' => $order->load('products')];
         });

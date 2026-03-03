@@ -16,7 +16,8 @@ class Product extends Model
         'offer_price',
         'ready',
         'restaurant_id',
-        'image'
+        'image',
+        'stock'
     );
 
     public function order()
