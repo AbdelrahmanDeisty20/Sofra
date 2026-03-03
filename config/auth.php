@@ -43,7 +43,7 @@ return [
             'hash' => false,
             'storage_key' => 'api_token',
         ],
-        'api_resturant' => [
+        'api_restaurant' => [
             'driver' => 'token',
             'provider' => 'users',
             'hash' => false,

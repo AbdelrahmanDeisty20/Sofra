@@ -24,61 +24,61 @@ class ItemController extends Controller
     public function addProduct(ProductRequest $request)
     {
         $product = $this->itemService->addProduct($request->validated());
-        return resposeJison(1, 'تم إضافة المنتج بنجاح', new ProductResource($product));
+        return jsonResponse(1, 'تم إضافة المنتج بنجاح', new ProductResource($product));
     }
 
     public function editProduct(UpdateProductRequest $request)
     {
         $product = $this->itemService->editProduct($request->product_id, $request->validated());
         if (!$product) {
-            return resposeJison(0, 'المنتج غير موجود');
+            return jsonResponse(0, 'المنتج غير موجود');
         }
-        return resposeJison(1, 'تم تعديل المنتج بنجاح', new ProductResource($product));
+        return jsonResponse(1, 'تم تعديل المنتج بنجاح', new ProductResource($product));
     }
 
     public function deleteProduct(Request $request)
     {
         $deleted = $this->itemService->deleteProduct($request->product_id);
         if ($deleted) {
-            return resposeJison(1, 'تم حذف المنتج بنجاح');
+            return jsonResponse(1, 'تم حذف المنتج بنجاح');
         }
-        return resposeJison(0, 'المنتج غير موجود');
+        return jsonResponse(0, 'المنتج غير موجود');
     }
 
     public function myProducts(Request $request)
     {
         $products = $this->itemService->getMyProducts();
-        return resposeJison(1, 'success', ProductResource::collection($products)->response()->getData(true));
+        return jsonResponse(1, 'success', ProductResource::collection($products)->response()->getData(true));
     }
 
     public function addOffer(OfferRequest $request)
     {
         $offer = $this->itemService->addOffer($request->validated());
-        return resposeJison(1, 'تم إضافة العرض بنجاح', new OfferResource($offer));
+        return jsonResponse(1, 'تم إضافة العرض بنجاح', new OfferResource($offer));
     }
 
     public function editOffer(UpdateOfferRequest $request)
     {
         $offer = $this->itemService->editOffer($request->offer_id, $request->validated());
         if (!$offer) {
-            return resposeJison(0, 'العرض غير موجود');
+            return jsonResponse(0, 'العرض غير موجود');
         }
-        return resposeJison(1, 'تم تعديل العرض بنجاح', new OfferResource($offer));
+        return jsonResponse(1, 'تم تعديل العرض بنجاح', new OfferResource($offer));
     }
 
     public function deleteOffer(Request $request)
     {
         $deleted = $this->itemService->deleteOffer($request->offer_id);
         if ($deleted) {
-            return resposeJison(1, 'تم حذف العرض بنجاح');
+            return jsonResponse(1, 'تم حذف العرض بنجاح');
         }
-        return resposeJison(0, 'العرض غير موجود');
+        return jsonResponse(0, 'العرض غير موجود');
     }
 
     public function myOffers(Request $request)
     {
         $offers = $this->itemService->getMyOffers();
-        return resposeJison(1, 'success', OfferResource::collection($offers)->response()->getData(true));
+        return jsonResponse(1, 'success', OfferResource::collection($offers)->response()->getData(true));
     }
 
     public function financialAccounts(Request $request)
@@ -90,7 +90,7 @@ class ItemController extends Controller
         $paymentsTotal = $restaurant->payments()->sum('pay');
         $amount = $totalCommission - $paymentsTotal;
 
-        return resposeJison(1, 'تم جلب البيانات المالية', [
+        return jsonResponse(1, 'تم جلب البيانات المالية', [
             'total_price' => $totalPrice,
             'total_commission' => $totalCommission,
             'payments_total' => $paymentsTotal,

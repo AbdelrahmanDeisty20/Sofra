@@ -41,13 +41,13 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('client/cancel-order', [OrderController::class, 'cancelOrder']);
     });
 
-    Route::group(['middleware' => ['auth:api_resturant', 'auto-check-user-type:restaurant']], function () {
+    Route::group(['middleware' => ['auth:api_restaurant', 'auto-check-user-type:restaurant']], function () {
         Route::post('restaurant/profile', [AuthController::class, 'profile']);
         Route::post('restaurant/register_token', [AuthController::class, 'registerToken']);
         Route::post('restaurant/remove-token', [AuthController::class, 'removeToken']);
         Route::get('restaurant/notifications-list', [AuthController::class, 'notificationList']);
 
-        // Item 
+        // Item
         Route::post('restaurant/add-product', [ItemController::class, 'addProduct']);
         Route::post('restaurant/edit-product', [ItemController::class, 'editProduct']);
         Route::get('restaurant/delete-product', [ItemController::class, 'deleteProduct']);

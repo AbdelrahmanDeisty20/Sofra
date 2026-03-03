@@ -16,7 +16,7 @@ class AutoCheckUserType
     public function handle(Request $request, Closure $next, string $type): Response
     {
         if ($request->user() && $request->user()->type->value !== $type) {
-            return resposeJison(0, 'Unauthorized - Only ' . $type . ' can access this route');
+            return jsonResponse(0, 'Unauthorized - Only ' . $type . ' can access this route');
         }
 
         return $next($request);

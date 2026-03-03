@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         $resource = $type === UserType::CLIENT ? new ClientResource($user->load('regions')) : new RestaurantResource($user->load('region', 'category'));
 
-        return resposeJison(1, 'تم التسجيل بنجاح', [
+        return jsonResponse(1, 'تم التسجيل بنجاح', [
             'api_token' => $user->api_token,
             'user' => $resource
         ]);
@@ -44,13 +44,13 @@ class AuthController extends Controller
 
         if ($user && $user->type->value === $request->type) {
             $resource = $user->type === UserType::CLIENT ? new ClientResource($user->load('regions')) : new RestaurantResource($user->load('region', 'category'));
-            return resposeJison(1, 'تم تسجيل الدخول بنجاح', [
+            return jsonResponse(1, 'تم تسجيل الدخول بنجاح', [
                 'api_token' => $user->api_token,
                 'user' => $resource
             ]);
         }
 
-        return resposeJison(0, 'بيانات الدخول غير صحيحة');
+        return jsonResponse(0, 'بيانات الدخول غير صحيحة');
     }
 
     public function profile(ProfileRequest $request)
@@ -58,42 +58,42 @@ class AuthController extends Controller
         $user = $this->authService->updateProfile($request->user(), $request->validated());
         $resource = $user->type === UserType::CLIENT ? new ClientResource($user->load('regions')) : new RestaurantResource($user->load('region', 'category'));
 
-        return resposeJison(1, 'تم تحديث الملف الشخصي بنجاح', $resource);
+        return jsonResponse(1, 'تم تحديث الملف الشخصي بنجاح', $resource);
     }
 
     public function registerToken(RegisterTokenRequest $request)
     {
         $this->authService->registerToken($request->user(), $request->validated());
-        return resposeJison(1, 'تم حفض التوكن بنجاح');
+        return jsonResponse(1, 'تم حفض التوكن بنجاح');
     }
 
     public function removeToken(TokenRequest $request)
     {
         $this->authService->removeToken($request->token);
-        return resposeJison(1, 'تم حذف التوكن بنجاح');
+        return jsonResponse(1, 'تم حذف التوكن بنجاح');
     }
 
     public function resetPassword(ResetPasswordRequest $request)
     {
         $result = $this->authService->resetPassword($request->phone);
         if ($result['status'] == 1) {
-            return resposeJison(1, 'تم ارسال كود التحقق', ['pin_code_for_test' => $result['code']]);
+            return jsonResponse(1, 'تم ارسال كود التحقق', ['pin_code_for_test' => $result['code']]);
         }
-        return resposeJison(0, 'الهاتف غير متاح');
+        return jsonResponse(0, 'الهاتف غير متاح');
     }
 
     public function password(NewPasswordRequest $request)
     {
         $updated = $this->authService->changePassword($request->phone, $request->pin_code, $request->password);
         if ($updated) {
-            return resposeJison(1, 'تم تغيير كلمة المرور بنجاح');
+            return jsonResponse(1, 'تم تغيير كلمة المرور بنجاح');
         }
-        return resposeJison(0, 'الكود غير صحيح');
+        return jsonResponse(0, 'الكود غير صحيح');
     }
 
     public function notificationList(Request $request)
     {
         $notifications = $this->authService->getNotifications($request->user());
-        return resposeJison(1, 'success', $notifications);
+        return jsonResponse(1, 'success', $notifications);
     }
 }
