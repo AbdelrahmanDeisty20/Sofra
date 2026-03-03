@@ -7,37 +7,39 @@ use App\Http\Requests\Api\Item\OfferRequest;
 use App\Http\Requests\Api\Item\ProductRequest;
 use App\Http\Requests\Api\Item\UpdateOfferRequest;
 use App\Http\Requests\Api\Item\UpdateProductRequest;
-use App\Models\Offer;
-use App\Models\Product;
+use App\Http\Resources\OfferResource;
+use App\Http\Resources\ProductResource;
+use App\Services\ItemService;
 use Illuminate\Http\Request;
 
 class ItemController extends Controller
 {
+    protected $itemService;
+
+    public function __construct(ItemService $itemService)
+    {
+        $this->itemService = $itemService;
+    }
+
     public function addProduct(ProductRequest $request)
     {
-        $data = $request->validated();
-        $data['restaurant_id'] = $request->user()->id;
-        $product = Product::create($data);
-
-        return resposeJison(1, 'تم إضافة المنتج بنجاح', $product);
+        $product = $this->itemService->addProduct($request->validated());
+        return resposeJison(1, 'تم إضافة المنتج بنجاح', new ProductResource($product));
     }
 
     public function editProduct(UpdateProductRequest $request)
     {
-        $product = $request->user()->products()->find($request->product_id);
+        $product = $this->itemService->editProduct($request->product_id, $request->validated());
         if (!$product) {
             return resposeJison(0, 'المنتج غير موجود');
         }
-
-        $product->update($request->validated());
-        return resposeJison(1, 'تم تعديل المنتج بنجاح', $product);
+        return resposeJison(1, 'تم تعديل المنتج بنجاح', new ProductResource($product));
     }
 
     public function deleteProduct(Request $request)
     {
-        $product = $request->user()->products()->find($request->product_id);
-        if ($product) {
-            $product->delete();
+        $deleted = $this->itemService->deleteProduct($request->product_id);
+        if ($deleted) {
             return resposeJison(1, 'تم حذف المنتج بنجاح');
         }
         return resposeJison(0, 'المنتج غير موجود');
@@ -45,35 +47,29 @@ class ItemController extends Controller
 
     public function myProducts(Request $request)
     {
-        $products = $request->user()->products()->latest()->paginate(20);
-        return resposeJison(1, 'success', $products);
+        $products = $this->itemService->getMyProducts();
+        return resposeJison(1, 'success', ProductResource::collection($products)->response()->getData(true));
     }
 
     public function addOffer(OfferRequest $request)
     {
-        $data = $request->validated();
-        $data['restaurant_id'] = $request->user()->id;
-        $offer = Offer::create($data);
-
-        return resposeJison(1, 'تم إضافة العرض بنجاح', $offer);
+        $offer = $this->itemService->addOffer($request->validated());
+        return resposeJison(1, 'تم إضافة العرض بنجاح', new OfferResource($offer));
     }
 
     public function editOffer(UpdateOfferRequest $request)
     {
-        $offer = $request->user()->offers()->find($request->offer_id);
+        $offer = $this->itemService->editOffer($request->offer_id, $request->validated());
         if (!$offer) {
             return resposeJison(0, 'العرض غير موجود');
         }
-
-        $offer->update($request->validated());
-        return resposeJison(1, 'تم تعديل العرض بنجاح', $offer);
+        return resposeJison(1, 'تم تعديل العرض بنجاح', new OfferResource($offer));
     }
 
     public function deleteOffer(Request $request)
     {
-        $offer = $request->user()->offers()->find($request->offer_id);
-        if ($offer) {
-            $offer->delete();
+        $deleted = $this->itemService->deleteOffer($request->offer_id);
+        if ($deleted) {
             return resposeJison(1, 'تم حذف العرض بنجاح');
         }
         return resposeJison(0, 'العرض غير موجود');
@@ -81,8 +77,8 @@ class ItemController extends Controller
 
     public function myOffers(Request $request)
     {
-        $offers = $request->user()->offers()->latest()->paginate(10);
-        return resposeJison(1, 'success', $offers);
+        $offers = $this->itemService->getMyOffers();
+        return resposeJison(1, 'success', OfferResource::collection($offers)->response()->getData(true));
     }
 
     public function financialAccounts(Request $request)

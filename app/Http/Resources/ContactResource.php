@@ -5,19 +5,18 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 
-class ClientResource extends JsonResource
+class ContactResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'full_name' => $this->full_name,
             'email' => $this->email,
             'phone' => $this->phone,
-            'image' => asset($this->image),
-            'status' => (int) $this->status,
-            'region_id' => (int) $this->region_id,
-            'region' => new RegionResource($this->whenLoaded('regions')),
+            'subject' => $this->subject,
+            'content' => $this->content,
+            'type' => $this->type,
         ];
     }
 }

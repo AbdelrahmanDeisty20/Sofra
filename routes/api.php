@@ -47,7 +47,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('restaurant/remove-token', [AuthController::class, 'removeToken']);
         Route::get('restaurant/notifications-list', [AuthController::class, 'notificationList']);
 
-        // Item Management
+        // Item 
         Route::post('restaurant/add-product', [ItemController::class, 'addProduct']);
         Route::post('restaurant/edit-product', [ItemController::class, 'editProduct']);
         Route::get('restaurant/delete-product', [ItemController::class, 'deleteProduct']);
@@ -60,7 +60,7 @@ Route::group(['prefix' => 'v1'], function () {
 
         Route::get('restaurant/financial-accounts', [ItemController::class, 'financialAccounts']);
 
-        // Order Management
+        // Order
         Route::post('restaurant/accept-order', [OrderController::class, 'acceptOrder']);
         Route::post('restaurant/reject-order', [OrderController::class, 'rejectOrder']);
         Route::post('restaurant/delivery-order', [OrderController::class, 'deliveryOrder']);

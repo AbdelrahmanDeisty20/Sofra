@@ -34,16 +34,32 @@ class MainService
 
     public function getRestaurants()
     {
-        return $this->userRepo->getByType(UserType::RESTAURANT, ['name', 'minimum_order', 'image', 'status', 'delivery_fees'])->paginate(10);
+        // Using models directly for simplicity if repo is limited, or expanding repo
+        return \App\Models\Restaurant::with('region', 'category')->paginate(10);
     }
 
     public function getRestaurantDetails(int $id)
     {
-        return $this->userRepo->findById($id);
+        return \App\Models\Restaurant::with('region', 'category')->find($id);
     }
 
     public function getFoods(int $restaurantId)
     {
-        return $this->mainRepo->getProductsByRestaurant($restaurantId)->paginate(10);
+        return \App\Models\Product::where('restaurant_id', $restaurantId)->paginate(10);
+    }
+
+    public function getComments()
+    {
+        return \App\Models\Comment::paginate(20);
+    }
+
+    public function getOffers()
+    {
+        return \App\Models\Offer::select('id', 'name', 'image', 'details', 'start_time', 'end_time', 'restaurant_id')->paginate(10);
+    }
+
+    public function createContact(array $data)
+    {
+        return \App\Models\Contact::create($data);
     }
 }

@@ -23,8 +23,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('mobile.landing');
+    return view('react_app');
 })->name('landing');
+
+// Catch-all route for React Router
+Route::get('/{any}', function () {
+    return view('react_app');
+})->where('any', '^(?!admin|api).*');  // Don't catch admin or api routes
 
 Route::get('/admin-dashboard', function () {
     return redirect()->route('home');
