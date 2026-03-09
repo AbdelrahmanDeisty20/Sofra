@@ -12,6 +12,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'admin'], function () {
+    Route::get('stats', [\App\Http\Controllers\Api\Admin\StatsController::class, 'index']);
     Route::apiResource('categories', \App\Http\Controllers\Api\Admin\CategoryController::class);
     Route::apiResource('cities', \App\Http\Controllers\Api\Admin\CityController::class);
     Route::apiResource('streets', \App\Http\Controllers\Api\Admin\StreetController::class);

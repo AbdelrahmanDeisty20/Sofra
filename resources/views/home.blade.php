@@ -137,6 +137,51 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <h3 class="page-header" style="margin-top: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">
+                    <i class="fa fa-money"></i> Financial Statistics
+                </h3>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box bg-purple" style="color: white">
+                    <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Total Sales</span>
+                        <span class="info-box-number">{{ number_format($orders->where('state', 'delivered')->sum('total_price'), 2) }} LE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box bg-teal" style="color: white">
+                    <span class="info-box-icon"><i class="fa fa-percent"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Expected Commissions</span>
+                        <span class="info-box-number">{{ number_format($orders->where('state', 'delivered')->sum('commission'), 2) }} LE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box bg-maroon" style="color: white">
+                    <span class="info-box-icon"><i class="fa fa-bank"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Received Payments</span>
+                        <span class="info-box-number">{{ number_format($payments->sum('amount'), 2) }} LE</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box bg-navy" style="color: white">
+                    <span class="info-box-icon"><i class="fa fa-balance-scale"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Remaining Debt</span>
+                        <span class="info-box-number">{{ number_format($orders->where('state', 'delivered')->sum('commission') - $payments->sum('amount'), 2) }} LE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
             <!-- Default box -->
             {{-- <div class="box"> --}}

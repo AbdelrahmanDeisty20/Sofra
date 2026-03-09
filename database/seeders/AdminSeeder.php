@@ -21,12 +21,12 @@ class AdminSeeder extends Seeder
         $permissions = Permission::all();
         $role->syncPermissions($permissions);
 
-        // Create Admin User
         $user = User::firstOrCreate([
             'email' => 'admin@admin.com'
         ], [
             'name' => 'Admin User',
             'password' => bcrypt('password'),
+            'type' => \App\Enums\UserType::ADMIN,
         ]);
 
         // Assign Role to User

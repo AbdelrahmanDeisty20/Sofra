@@ -1,0 +1,28 @@
+
+Disabling Foreign Key Checks...
+Seeding Admin...
+Seeding Locations...
+Seeding Sofra Data...
+Seeding restaurant: قصر المشويات
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pin_code' in 'field list' (Connection: mysql, SQL: insert into `users` (`email`, `name`, `phone`, `minimum_order`, `delivery_fees`, `whatsapp`, `image`, `password`, `region_id`, `status`, `type`, `pin_code`, `updated_at`, `created_at`) values (grill@sofra.com, قصر المشويات, 01011111111, 100, 20, 01011111111, https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80, $2y$12$X5WezUjT6uOr4sBPF58Di.ZsUMHc9hqAHGea4tJTNNrtmfr3.WMzC, 118, 1, restaurant, 8754, 2026-03-09 22:25:43, 2026-03-09 22:25:43))
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:825
+    821▕                     $this->getName(), $query, $this->prepareBindings($bindings), $e
+    822▕                 );
+    823▕             }
+    824▕ 
+  ➜ 825▕             throw new QueryException(
+    826▕                 $this->getName(), $query, $this->prepareBindings($bindings), $e
+    827▕             );
+    828▕         }
+    829▕     }
+
+  1   vendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php:47
+      PDOException::("SQLSTATE[42S22]: Column not found: 1054 Unknown column 'pin_code' in 'field list'")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\MySqlConnection.php:47
+      PDO::prepare("insert into `users` (`email`, `name`, `phone`, `minimum_order`, `delivery_fees`, `whatsapp`, `image`, `password`, `region_id`, `status`, `type`, `pin_code`, `updated_at`, `created_at`) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+

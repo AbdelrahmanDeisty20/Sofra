@@ -80,6 +80,7 @@ class SofraDataSeeder extends Seeder
         ];
 
         foreach ($restaurantsData as $data) {
+            echo 'Seeding restaurant: ' . $data['name'] . "\n";
             $restaurant = User::firstOrCreate(
                 ['email' => $data['email']],
                 array_merge($data, [
@@ -92,9 +93,11 @@ class SofraDataSeeder extends Seeder
             );
 
             // Link categories to restaurant
+            echo "Linking categories...\n";
             $restaurant->categories()->sync($cats->random(2)->pluck('id'));
 
             // Add products for each restaurant
+            echo "Seeding products...\n";
             $productsData = [
                 ['name' => 'وجبة عائلية', 'price' => 350, 'details' => 'كيلو مشكل مشويات مع أرز وسلطات'],
                 ['name' => 'بيتزا رانش', 'price' => 120, 'details' => 'دجاج رانش مع صوص الجبنة المميز'],
