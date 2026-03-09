@@ -7,16 +7,16 @@ use Illuminate\Http\Request;
 
 class OrderResource extends JsonResource
 {
-    public function toArray(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(\Illuminate\Http\Request $request): array
     {
         return [
             'id' => $this->id,
-            'address' => $this->address,
-            'payment_method' => $this->payment_method,
             'state' => $this->state,
-            'note' => $this->note,
-            'delivery_charge' => (float) $this->delivery_charge,
-            'commission' => (float) $this->commission,
             'total_price' => (float) $this->total_price,
             'net' => (float) $this->net,
             'restaurant' => new RestaurantResource($this->whenLoaded('restaurant')),

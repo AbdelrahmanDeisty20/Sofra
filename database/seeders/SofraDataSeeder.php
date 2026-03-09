@@ -2,12 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserType;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\Offer;
 use App\Models\Product;
-use App\Models\Restaurant;
 use App\Models\Street;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -38,7 +39,7 @@ class SofraDataSeeder extends Seeder
             return;
         }
 
-        // 2. Restaurants
+        // 2. Restaurants (Using User model with type restaurant)
         $restaurantsData = [
             [
                 'name' => 'قصر المشويات',
@@ -79,15 +80,19 @@ class SofraDataSeeder extends Seeder
         ];
 
         foreach ($restaurantsData as $data) {
-            $restaurant = Restaurant::firstOrCreate(
+            $restaurant = User::firstOrCreate(
                 ['email' => $data['email']],
                 array_merge($data, [
-                    'password' => '123456',
+                    'password' => Hash::make('123456'),
                     'region_id' => $regions->random()->id,
                     'status' => 1,
+                    'type' => UserType::RESTAURANT,
                     'pin_code' => rand(1000, 9999)
                 ])
             );
+
+            // Link categories to restaurant
+            $restaurant->categories()->sync($cats->random(2)->pluck('id'));
 
             // Add products for each restaurant
             $productsData = [
@@ -102,6 +107,7 @@ class SofraDataSeeder extends Seeder
                     'restaurant_id' => $restaurant->id,
                     'image' => 'https://via.placeholder.com/300x200?text=FoodItem',
                     'ready' => '1',
+                    'stock' => rand(10, 100),
                     'offer_price' => $pData['price'] * 0.9,
                 ]));
             }
@@ -114,16 +120,6 @@ class SofraDataSeeder extends Seeder
                 'restaurant_id' => $restaurant->id,
                 'start_time' => now(),
                 'end_time' => now()->addDays(30),
-            ]);
-
-            // Add some contact messages
-            \App\Models\Contact::create([
-                'full_name' => 'أحمد علي',
-                'email' => 'ahmed@test.com',
-                'content' => 'أكل ممتاز وتوصيل سريع جداً، شكراً ليكم',
-                'phone' => '0123456789',
-                'subject' => 'تقييم تجربة',
-                'type' => 'complaint',
             ]);
         }
     }

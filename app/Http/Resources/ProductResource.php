@@ -2,12 +2,18 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 
 class ProductResource extends JsonResource
 {
-    public function toArray(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(\Illuminate\Http\Request $request): array
     {
         return [
             'id' => $this->id,
@@ -15,9 +21,12 @@ class ProductResource extends JsonResource
             'details' => $this->details,
             'price' => (float) $this->price,
             'offer_price' => (float) $this->offer_price,
-            'image' => asset($this->image),
+            'image_url' => $this->image ? asset('storage/' . $this->image) : null,
             'ready' => (bool) $this->ready,
-            'restaurant_id' => (int) $this->restaurant_id,
+            'stock' => $this->stock,
+            'restaurant_id' => $this->restaurant_id,
+            'restaurant' => new UserResource($this->whenLoaded('restaurant')),
+            'created_at' => $this->created_at,
         ];
     }
 }

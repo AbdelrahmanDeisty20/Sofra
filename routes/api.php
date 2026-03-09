@@ -11,6 +11,29 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::group(['middleware' => ['auth:sanctum'], 'prefix' => 'admin'], function () {
+    Route::apiResource('categories', \App\Http\Controllers\Api\Admin\CategoryController::class);
+    Route::apiResource('cities', \App\Http\Controllers\Api\Admin\CityController::class);
+    Route::apiResource('streets', \App\Http\Controllers\Api\Admin\StreetController::class);
+    Route::apiResource('products', \App\Http\Controllers\Api\Admin\ProductController::class)->only(['index', 'show', 'destroy']);
+    Route::apiResource('offers', \App\Http\Controllers\Api\Admin\OfferController::class)->only(['index', 'show', 'destroy']);
+    Route::apiResource('users', \App\Http\Controllers\Api\Admin\UserController::class)->only(['index', 'show', 'destroy']);
+    Route::post('users/{id}/toggle-status', [\App\Http\Controllers\Api\Admin\UserController::class, 'toggleStatus']);
+
+    Route::get('orders', [\App\Http\Controllers\Api\Admin\OrderController::class, 'index']);
+    Route::get('orders/{id}', [\App\Http\Controllers\Api\Admin\OrderController::class, 'show']);
+    Route::post('orders/{id}/state', [\App\Http\Controllers\Api\Admin\OrderController::class, 'updateState']);
+    Route::get('commissions', [\App\Http\Controllers\Api\Admin\OrderController::class, 'commissions']);
+
+    Route::apiResource('comments', \App\Http\Controllers\Api\Admin\CommentController::class)->only(['index', 'destroy']);
+    Route::apiResource('contacts', \App\Http\Controllers\Api\Admin\ContactController::class)->only(['index', 'show', 'destroy']);
+
+    Route::get('settings', [\App\Http\Controllers\Api\Admin\SettingController::class, 'show']);
+    Route::post('settings', [\App\Http\Controllers\Api\Admin\SettingController::class, 'update']);
+
+    Route::apiResource('payments', \App\Http\Controllers\Api\Admin\PaymentController::class)->only(['index', 'store', 'show', 'destroy']);
+});
+
 Route::group(['prefix' => 'v1'], function () {
     Route::get('cities', [MainController::class, 'cities']);
     Route::get('regions', [MainController::class, 'regions']);

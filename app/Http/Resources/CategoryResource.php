@@ -7,11 +7,18 @@ use Illuminate\Http\Request;
 
 class CategoryResource extends JsonResource
 {
-    public function toArray(Request $request): array
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(\Illuminate\Http\Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

@@ -11,6 +11,7 @@ import Navbar from './Navbar';
 import { CartProvider } from '../context/CartContext';
 
 function App() {
+  console.log("App component rendering...");
   return (
     <CartProvider>
       <Router>
